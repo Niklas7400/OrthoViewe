@@ -21,6 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import java.io.File;
+import android.os.Environment;
+import androidx.core.content.FileProvider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,9 +51,16 @@ public class MainActivity extends AppCompatActivity {
     private void startRecording() {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            // Ändern des Speicherpfads für das aufgenommene Video
+            File videoFile = new File(Environment.getExternalStorageDirectory(), "MeinOrdner/MeinVideo.mp4");
+            Uri videoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", videoFile);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
+
+
 
     private boolean checkPermission() {
         int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
