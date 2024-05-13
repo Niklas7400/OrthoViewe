@@ -22,23 +22,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import java.io.File;
-import android.os.Environment;
-import androidx.core.content.FileProvider;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_VIDEO_CAPTURE = 101;
     private static final int PERMISSION_REQUEST_CODE = 102;
-    private static final String VIDEO_DIRECTORY_NAME = "Aufnahmen";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        createVideoDirectory();
-
         Button btnRecordVideo = findViewById(R.id.btnRecordVideo);
+        Button btnViewVideo = findViewById(R.id.btnViewVideo);
         btnRecordVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,20 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        btnViewVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewRecordedVideo();
+            }
+        });
     }
 
     private void startRecording() {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            // Ändern des Speicherpfads für das aufgenommene Video
-            File videoFile = new File(getFilesDir(), "MeinVideo.mp4");
-            Uri videoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", videoFile);
-            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri);
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
-
-
 
     private boolean checkPermission() {
         int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -87,29 +83,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    private void viewRecordedVideo() {
+        // Pfad zur aufgenommenen Videoaufnahme im internen Speicher
+        File videoFile = new File(getFilesDir(), "MeinVideo.mp4");
 
-    private void createVideoDirectory() {
-        // Überprüfe, ob externer Speicher verfügbar ist
-        if (isExternalStorageWritable()) {
-            // Erstelle das Verzeichnis, falls es nicht vorhanden ist
-            File directory = new File(Environment.getExternalStorageDirectory(), VIDEO_DIRECTORY_NAME);
-            if (!directory.exists()) {
-                if (directory.mkdirs()) {
-                    Toast.makeText(this, "Speicherort für Videos erstellt", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Fehler beim Erstellen des Speicherorts", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "Speicherort für Videos existiert bereits", Toast.LENGTH_SHORT).show();
-            }
+        // Überprüfe, ob die Datei existiert
+        if (videoFile.exists()) {
+            // Öffne die aufgenommene Videoaufnahme mit einer Video-Abspiel-App
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(videoFile), "video/*");
+            startActivity(intent);
         } else {
-            Toast.makeText(this, "Externen Speicher nicht verfügbar", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Video not found!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }
