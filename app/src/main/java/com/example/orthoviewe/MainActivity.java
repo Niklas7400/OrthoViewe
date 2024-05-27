@@ -38,14 +38,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         editTextFileName = findViewById(R.id.name);
-        Button btnRecordVideo = findViewById(R.id.btnRecordVideo);
+        Button btnRecordFront = findViewById(R.id.btnRecordFront);
+        Button btnRecordSide = findViewById(R.id.btnRecordSide);
         Button btnViewVideo = findViewById(R.id.btnViewVideo);
 
-        btnRecordVideo.setOnClickListener(new View.OnClickListener() {
+        btnRecordFront.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkPermission()) {
-                    startRecording();
+                    startRecording("front ");
+                } else {
+                    requestPermission();
+                }
+            }
+        });
+
+        btnRecordSide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermission()) {
+                    startRecording("side ");
                 } else {
                     requestPermission();
                 }
@@ -60,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void startRecording() {
-        String fileName = editTextFileName.getText().toString().trim();
+    private void startRecording(String view) {
+        String fileName = view+editTextFileName.getText().toString().trim();
         if (fileName.isEmpty()) {
             Toast.makeText(this, "Please enter a file name", Toast.LENGTH_SHORT).show();
             return;
@@ -114,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startRecording();
+                startRecording("front ");
             } else {
                 Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
             }

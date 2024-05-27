@@ -28,10 +28,17 @@
             android:hint="hint" />
 
         <Button
-            android:id="@+id/btnRecordVideo"
+            android:id="@+id/btnRecordSide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Record Side" />
+
+        <Button
+            android:id="@+id/btnRecordFront"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Record Front"/>
+
 
         <Button
             android:id="@+id/btnViewVideo"
@@ -46,4 +53,5 @@
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
