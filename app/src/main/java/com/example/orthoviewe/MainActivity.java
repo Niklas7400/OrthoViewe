@@ -8,8 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -67,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
         btnViewVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showVideoFiles();
+                showVideoFolders();
             }
         });
     }
 
     private void startRecording(String view) {
-        String fileName = view+editTextFileName.getText().toString().trim();
-        if (fileName.isEmpty()) {
-            Toast.makeText(this, "Please enter a file name", Toast.LENGTH_SHORT).show();
+        String folderName = editTextFileName.getText().toString().trim();
+        if (folderName.isEmpty()) {
+            Toast.makeText(this, "Please enter a folder name", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -83,9 +86,10 @@ public class MainActivity extends AppCompatActivity {
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
             File videoFile = null;
             try {
-                videoFile = createVideoFile(fileName);
+                videoFile = createVideoFile(view, folderName);
             } catch (IOException ex) {
                 Toast.makeText(this, "Error occurred while creating the video file", Toast.LENGTH_SHORT).show();
+                ex.printStackTrace();
             }
 
             if (videoFile != null) {
@@ -96,15 +100,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private File createVideoFile(String fileName) throws IOException {
+    private File createVideoFile(String view, String folderName) throws IOException {
+        File storageDir = new File(getExternalFilesDir(null), folderName);
+        if (!storageDir.exists() && !storageDir.mkdirs()) {
+            throw new IOException("Failed to create directory: " + storageDir.getAbsolutePath());
+        }
+
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String videoFileName = fileName + "_" + timeStamp;
-        File storageDir = getExternalFilesDir(null);
+        String videoFileName = view + "VIDEO_" + timeStamp;
         File video = File.createTempFile(
                 videoFileName,
                 ".mp4",
                 storageDir
         );
+
         currentVideoPath = video.getAbsolutePath();
         return video;
     }
@@ -133,9 +142,53 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showVideoFiles() {
+    private void showVideoFolders() {
         File storageDir = getExternalFilesDir(null);
-        File[] videoFiles = storageDir.listFiles((dir, name) -> name.endsWith(".mp4"));
+        File[] folders = storageDir.listFiles(File::isDirectory);
+
+        if (folders != null && folders.length > 0) {
+            ArrayList<String> folderNames = new ArrayList<>();
+            for (File folder : folders) {
+                folderNames.add(folder.getName());
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select a folder to view videos");
+
+            // Create a view for the search functionality
+            View searchView = getLayoutInflater().inflate(R.layout.dialog_search, null);
+            SearchView search = searchView.findViewById(R.id.searchView);
+            ListView listView = searchView.findViewById(R.id.listView);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, folderNames);
+            listView.setAdapter(adapter);
+
+            search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    adapter.getFilter().filter(newText);
+                    return false;
+                }
+            });
+
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                showVideosInFolder(new File(storageDir, adapter.getItem(position)));
+            });
+
+            builder.setView(searchView);
+            builder.show();
+        } else {
+            Toast.makeText(this, "No folders found!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showVideosInFolder(File folder) {
+        File[] videoFiles = folder.listFiles((dir, name) -> name.endsWith(".mp4"));
 
         if (videoFiles != null && videoFiles.length > 0) {
             ArrayList<String> videoFileNames = new ArrayList<>();
@@ -145,15 +198,14 @@ public class MainActivity extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Select a video to view");
-            builder.setItems(videoFileNames.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    playVideo(videoFiles[which]);
-                }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, videoFileNames);
+            builder.setItems(videoFileNames.toArray(new String[0]), (dialog, which) -> {
+                playVideo(videoFiles[which]);
             });
             builder.show();
         } else {
-            Toast.makeText(this, "No videos found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No videos found in this folder!", Toast.LENGTH_SHORT).show();
         }
     }
 
