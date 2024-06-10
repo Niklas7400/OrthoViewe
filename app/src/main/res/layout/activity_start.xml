@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StartActivity">
+
+    <Button
+        android:id="@+id/btnOpenApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open App"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp" />
+
+    <Button
+        android:id="@+id/btnOpenStorage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Storage"
+        android:layout_below="@id/btnOpenApp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+</RelativeLayout>

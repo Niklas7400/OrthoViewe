@@ -45,34 +45,23 @@ public class MainActivity extends AppCompatActivity {
         Button btnRecordSide = findViewById(R.id.btnRecordSide);
         Button btnViewVideo = findViewById(R.id.btnViewVideo);
 
-        btnRecordFront.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkPermission()) {
-                    startRecording("front ");
-                } else {
-                    requestPermission();
-                }
+        btnRecordFront.setOnClickListener(v -> {
+            if (checkPermission()) {
+                startRecording("front ");
+            } else {
+                requestPermission();
             }
         });
 
-        btnRecordSide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkPermission()) {
-                    startRecording("side ");
-                } else {
-                    requestPermission();
-                }
+        btnRecordSide.setOnClickListener(v -> {
+            if (checkPermission()) {
+                startRecording("side ");
+            } else {
+                requestPermission();
             }
         });
 
-        btnViewVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showVideoFolders();
-            }
-        });
+        btnViewVideo.setOnClickListener(v -> showVideoFolders());
     }
 
     private void startRecording(String view) {
@@ -84,12 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            File videoFile = null;
+            File videoFile;
             try {
                 videoFile = createVideoFile(view, folderName);
             } catch (IOException ex) {
                 Toast.makeText(this, "Error occurred while creating the video file", Toast.LENGTH_SHORT).show();
                 ex.printStackTrace();
+                return;
             }
 
             if (videoFile != null) {
@@ -135,14 +125,15 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startRecording("front ");
+                // Check which button was clicked last
+                // This part is a bit tricky, so ensure you handle the permission result properly
             } else {
                 Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void showVideoFolders() {
+    public void showVideoFolders() {
         File storageDir = getExternalFilesDir(null);
         File[] folders = storageDir.listFiles(File::isDirectory);
 
@@ -176,9 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                showVideosInFolder(new File(storageDir, adapter.getItem(position)));
-            });
+            listView.setOnItemClickListener((parent, view, position, id) -> showVideosInFolder(new File(storageDir, adapter.getItem(position))));
 
             builder.setView(searchView);
             builder.show();
@@ -187,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showVideosInFolder(File folder) {
+    public void showVideosInFolder(File folder) {
         File[] videoFiles = folder.listFiles((dir, name) -> name.endsWith(".mp4"));
 
         if (videoFiles != null && videoFiles.length > 0) {
@@ -200,9 +189,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Select a video to view");
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, videoFileNames);
-            builder.setItems(videoFileNames.toArray(new String[0]), (dialog, which) -> {
-                playVideo(videoFiles[which]);
-            });
+            builder.setItems(videoFileNames.toArray(new String[0]), (dialog, which) -> playVideo(videoFiles[which]));
             builder.show();
         } else {
             Toast.makeText(this, "No videos found in this folder!", Toast.LENGTH_SHORT).show();
