@@ -123,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Check which button was clicked last
-                // This part is a bit tricky, so ensure you handle the permission result properly
+                // Permission granted, you may want to call the last clicked button action here
             } else {
                 Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
             }
@@ -169,6 +169,28 @@ public class MainActivity extends AppCompatActivity {
 
             listView.setOnItemClickListener((parent, view, position, id) -> showVideosInFolder(new File(storageDir, adapter.getItem(position))));
 
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                String selectedFolder = adapter.getItem(position);
+                File folder = new File(storageDir, selectedFolder);
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Folder")
+                        .setMessage("Are you sure you want to delete this folder and all its contents?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            if (deleteDirectory(folder)) {
+                                Toast.makeText(this, "Folder deleted", Toast.LENGTH_SHORT).show();
+                                adapter.remove(selectedFolder);
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(this, "Failed to delete folder", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+                return true;
+            });
+
             builder.setView(searchView);
             builder.show();
         } else {
@@ -186,21 +208,57 @@ public class MainActivity extends AppCompatActivity {
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select a video to view");
+            builder.setTitle("Select a video to view or delete");
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, videoFileNames);
-            builder.setItems(videoFileNames.toArray(new String[0]), (dialog, which) -> playVideo(videoFiles[which]));
+            ListView listView = new ListView(this);
+            listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                // Code to play the video
+            });
+
+            listView.setOnItemLongClickListener((parent, view, position, id) -> {
+                String selectedVideo = adapter.getItem(position);
+                File videoFile = new File(folder, selectedVideo);
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Video")
+                        .setMessage("Are you sure you want to delete this video?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            if (videoFile.delete()) {
+                                Toast.makeText(this, "Video deleted", Toast.LENGTH_SHORT).show();
+                                adapter.remove(selectedVideo);
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(this, "Failed to delete video", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+                return true;
+            });
+
+            builder.setView(listView);
             builder.show();
         } else {
             Toast.makeText(this, "No videos found in this folder!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void playVideo(File videoFile) {
-        Uri videoURI = FileProvider.getUriForFile(this, "com.example.orthoviewe.fileprovider", videoFile);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(videoURI, "video/*");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(intent);
+    private boolean deleteDirectory(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            if (children != null) {
+                for (String child : children) {
+                    boolean success = deleteDirectory(new File(dir, child));
+                    if (!success) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return dir.delete();
     }
 }
