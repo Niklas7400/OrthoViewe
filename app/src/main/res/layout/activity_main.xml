@@ -16,32 +16,32 @@
         <TextView
             android:id="@+id/labelName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="75dp"
             android:text="Name des Spielers" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="hint" />
+            android:layout_height="75dp"
+            android:hint="Max Mustermann" />
 
         <Button
             android:id="@+id/btnRecordSide"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Record Side" />
+            android:layout_height="75dp"
+            android:text="Aufnehmen Seitlich" />
 
         <Button
             android:id="@+id/btnRecordFront"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Record Front" />
+            android:layout_height="75dp"
+            android:text="Aufnehmen Frontal" />
 
         <Button
             android:id="@+id/btnViewVideo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View" />
+            android:layout_height="75dp"
+            android:text="Aufnahmen" />
 
     </LinearLayout>
 
