@@ -9,13 +9,13 @@
               <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\omarl\.android\avd\Pixel_Fold_API_29.avd" />
+                  <type value="SERIAL_NUMBER" />
+                  <value value="adb-RFCTA08E4LN-zDwsdl._adb-tls-connect._tcp" />
                 </Key>
               </deviceKey>
             </Target>
           </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-06-24T10:26:06.063351100Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-06-10T10:52:30.411980800Z" />
         </State>
       </entry>
       <entry key="app">
