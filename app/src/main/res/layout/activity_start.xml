@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginTop="25dp"
-        android:text="Open Storage"
+        android:text="Speicher öffner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnOpenApp" />
 
