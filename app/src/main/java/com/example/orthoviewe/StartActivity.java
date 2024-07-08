@@ -3,7 +3,6 @@ package com.example.orthoviewe;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class StartActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_OPEN_DOCUMENT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +26,7 @@ public class StartActivity extends AppCompatActivity {
 
         Button btnOpenApp = findViewById(R.id.btnOpenApp);
         Button btnOpenStorage = findViewById(R.id.btnOpenStorage);
+        Button btnTutorial = findViewById(R.id.button6); // Neuer Button für das Tutorial
 
         btnOpenApp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +42,16 @@ public class StartActivity extends AppCompatActivity {
                 showVideoFolders();
             }
         });
+
+        btnTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartActivity.this, VideoTutorialActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
     public void showVideoFolders() {
         File storageDir = getExternalFilesDir(null);
         File[] folders = storageDir.listFiles(File::isDirectory);

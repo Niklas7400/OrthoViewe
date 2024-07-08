@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 102;
     private String currentVideoPath;
     private EditText editTextFileName;
-    private VideoView videoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         Button btnRecordSide = findViewById(R.id.btnRecordSide);
         Button btnViewVideo = findViewById(R.id.btnViewVideo);
         Button btnVideoTutorial = findViewById(R.id.btnVideoTutorial);
-        videoView = findViewById(R.id.videoView);
 
         btnRecordFront.setOnClickListener(v -> {
             if (checkPermission()) {
@@ -67,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
         btnViewVideo.setOnClickListener(v -> showVideoFolders());
 
-        btnVideoTutorial.setOnClickListener(v -> playVideoTutorial());
+        btnVideoTutorial.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, VideoTutorialActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void startRecording(String view) {
@@ -250,13 +250,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.no_videos_found, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void playVideoTutorial() {
-        // Setzen Sie die VideoView sichtbar und spielen Sie das lokale Video ab
-        videoView.setVisibility(View.VISIBLE);
-        videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/raw/video_tutorial"));
-        videoView.start();
     }
 
     private boolean deleteDirectory(File dir) {
