@@ -1,24 +1,18 @@
 <resources>
     <string name="app_name">OrthoViewe</string>
-    <string name="label_name">Name des Spielers</string>
-    <string name="hint_name">Name eingeben</string>
-    <string name="btn_record_side">Seitliches Video aufnehmen</string>
-    <string name="btn_record_front">Front Video aufnehmen</string>
-    <string name="btn_view_video">Videos anzeigen</string>
-    <string name="btn_video_tutorial">Video Tutorial</string>
     <string name="enter_folder_name">Bitte einen Ordnernamen eingeben</string>
     <string name="error_creating_video">Fehler beim Erstellen der Videodatei</string>
     <string name="permission_denied">Berechtigung verweigert!</string>
     <string name="select_folder">Ordner auswählen, um Videos anzuzeigen</string>
     <string name="no_folders_found">Keine Ordner gefunden!</string>
-    <string name="delete_folder">Ordner löschen</string>
+    <string name="select_video">Video auswählen, um es anzusehen</string>
+    <string name="no_videos_found">Keine Videos in diesem Ordner gefunden!</string>
     <string name="delete_folder_message">Sind Sie sicher, dass Sie diesen Ordner und alle seine Inhalte löschen möchten?</string>
+    <string name="delete_video_message">Sind Sie sicher, dass Sie dieses Video löschen möchten?</string>
+    <string name="delete_folder">Ordner löschen</string>
+    <string name="delete_video">Video löschen</string>
     <string name="folder_deleted">Ordner gelöscht</string>
     <string name="folder_delete_failed">Fehler beim Löschen des Ordners</string>
-    <string name="select_video">Video auswählen, um es anzusehen oder zu löschen</string>
-    <string name="delete_video">Video löschen</string>
-    <string name="delete_video_message">Sind Sie sicher, dass Sie dieses Video löschen möchten?</string>
     <string name="video_deleted">Video gelöscht</string>
     <string name="video_delete_failed">Fehler beim Löschen des Videos</string>
-    <string name="no_videos_found">Keine Videos in diesem Ordner gefunden!</string>
 </resources>

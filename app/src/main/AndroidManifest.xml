@@ -1,19 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.orthoviewe">
-
     <uses-feature android:name="android.hardware.camera" android:required="true"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/applogo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/applogo"
         android:supportsRtl="true"
         android:theme="@style/Theme.OrthoViewe">
-
         <activity
             android:name=".StartActivity"
             android:exported="true">
@@ -22,17 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>
-
         <activity
             android:name=".VideoTutorialActivity"
             android:exported="true">
         </activity>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.orthoviewe.fileprovider"
@@ -42,7 +36,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
-
 </manifest>

@@ -9,51 +9,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_margin="16dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/labelName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/label_name" />
+            android:text="Name des Spielers" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_name" />
+            android:hint="hint" />
 
         <Button
             android:id="@+id/btnRecordSide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_record_side" />
+            android:text="Seitenaufnahme" />
 
         <Button
             android:id="@+id/btnRecordFront"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_record_front"/>
+            android:text="Frontaufnahme" />
 
         <Button
             android:id="@+id/btnViewVideo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_view_video" />
+            android:text="Videos anzeigen" />
 
         <Button
             android:id="@+id/btnVideoTutorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_video_tutorial" />
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
+            android:text="Tutorial" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

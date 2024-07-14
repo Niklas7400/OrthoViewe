@@ -26,29 +26,20 @@ public class StartActivity extends AppCompatActivity {
 
         Button btnOpenApp = findViewById(R.id.btnOpenApp);
         Button btnOpenStorage = findViewById(R.id.btnOpenStorage);
-        Button btnTutorial = findViewById(R.id.button6); // Neuer Button für das Tutorial
+        Button btnTutorial = findViewById(R.id.btnVideoTutorial); // Korrigierte ID
 
-        btnOpenApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        btnOpenApp.setOnClickListener(v -> {
+            Intent intent = new Intent(StartActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
-        btnOpenStorage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showVideoFolders();
-            }
+        btnOpenStorage.setOnClickListener(v -> {
+            showVideoFolders();
         });
 
-        btnTutorial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartActivity.this, VideoTutorialActivity.class);
-                startActivity(intent);
-            }
+        btnTutorial.setOnClickListener(v -> {
+            Intent intent = new Intent(StartActivity.this, VideoTutorialActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -63,7 +54,7 @@ public class StartActivity extends AppCompatActivity {
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select a folder to view videos");
+            builder.setTitle("Ordner auswählen, um Videos anzuzeigen");
 
             // Create a view for the search functionality
             View searchView = getLayoutInflater().inflate(R.layout.dialog_search, null);
@@ -93,7 +84,7 @@ public class StartActivity extends AppCompatActivity {
             builder.setView(searchView);
             builder.show();
         } else {
-            Toast.makeText(this, "No folders found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Keine Ordner gefunden!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -107,7 +98,7 @@ public class StartActivity extends AppCompatActivity {
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select a video to view");
+            builder.setTitle("Video auswählen, um es anzusehen");
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, videoFileNames);
             builder.setItems(videoFileNames.toArray(new String[0]), (dialog, which) -> {
@@ -115,7 +106,7 @@ public class StartActivity extends AppCompatActivity {
             });
             builder.show();
         } else {
-            Toast.makeText(this, "No videos found in this folder!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Keine Videos in diesem Ordner gefunden!", Toast.LENGTH_SHORT).show();
         }
     }
 
